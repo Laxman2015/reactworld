@@ -1,14 +1,16 @@
 "use strict";
 
 var gulp = require('gulp');
-var connect = require('gulp-connect'); //Runs a local dev server
-var open = require('gulp-open'); //Open a URL in a web browser
-var browserify = require('browserify'); // Bundles JS
-var reactify = require('reactify');  // Transforms React JSX to JS
-var source = require('vinyl-source-stream'); // Use conventional text streams with Gulp
-var concat = require('gulp-concat'); //Concatenates files
-var lint = require('gulp-eslint'); //Lint JS files, including JSX
+var connect = require('gulp-connect'); //Local dev server run
+var open = require('gulp-open'); //Open a url
+var browserify = require('browserify'); // Bundles js
 
+var reactify = require('reactify');  // Transforms JSX to JS
+var source = require('vinyl-source-stream'); // Conventional text streams with Gulp
+var concat = require('gulp-concat'); //Concaten files
+var lint = require('gulp-eslint'); //Lint js and jsx files
+
+//configuration setup
 var config = {
 	port: 9005,
 	devBaseUrl: 'http://localhost',
@@ -17,7 +19,8 @@ var config = {
 		js: './src/**/*.js',
 		css: [
       		'node_modules/bootstrap/dist/css/bootstrap.min.css',
-      		'node_modules/bootstrap/dist/css/bootstrap-theme.min.css'
+			'node_modules/bootstrap/dist/css/bootstrap-theme.min.css',
+			'node_modules/toastr/build/toastr.css'
 		],
 		images:'./src/images/*',
 		dist: './dist',
@@ -25,7 +28,7 @@ var config = {
 	}
 }
 
-//Start a local development server
+//Start a local dev server
 gulp.task('connect', function() {
 	connect.server({
 		root: ['dist'],
@@ -35,11 +38,13 @@ gulp.task('connect', function() {
 	});
 });
 
+//Open Url
 gulp.task('open', ['connect'], function() {
 	gulp.src('dist/index.html')
 		.pipe(open({ uri: config.devBaseUrl + ':' + config.port + '/'}));
 });
 
+// set default path to deployable files
 gulp.task('html', function() {
 	gulp.src(config.paths.html)
 		.pipe(gulp.dest(config.paths.dist))
@@ -68,6 +73,7 @@ gulp.task('images', function() {
 		.pipe(connect.reload());
 });
 
+// Linting
 gulp.task('lint', function() {
 	return gulp.src(config.paths.js)
 		.pipe(lint({config: 'eslint.config.json'}))
@@ -79,4 +85,5 @@ gulp.task('watch', function() {
 	gulp.watch(config.paths.js, ['js', 'lint']);
 });
 
+//Set Default task run by Gulp
 gulp.task('default', ['html', 'js', 'css', 'images', 'lint', 'open', 'watch']);

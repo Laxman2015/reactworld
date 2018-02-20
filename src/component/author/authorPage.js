@@ -7,21 +7,21 @@ var Link = require('react-router').Link;
 var AuthorPage = React.createClass({
     getInitialState: function(){
         return {
-            authers: []
+            authors: []
         };
     },
 
     componentDidMount: function(){
         if(this.isMounted()){
-            this.setState({authers: AuthorApi.getAllAuthors()});
+            this.setState({authors: AuthorApi.getAllAuthors()});
         }
     },
     render: function(){        
         return (
             <div>
                 <h1>Author</h1>
-                <Link to="addAuthor" className="btn btn-default btn-md">Edit Author</Link>
-                <AuthorList authers={this.state.authers}/>
+                <Link to="addAuthor" className="btn btn-default btn-md">Add Author</Link>
+                <AuthorList authors={this.state.authors}/>
             </div>
         );
     }

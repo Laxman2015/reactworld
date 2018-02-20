@@ -1,16 +1,17 @@
 "use strict";
 var React = require('react');
+var Link = require('react-router').Link;
 var AuthorApi = require('../../component/api/authorApi');
 
 var AuthorList = React.createClass({
     propsType: {
-        authers: React.PropTypes.array.isReaquired
+        authors: React.PropTypes.array.isReaquired
     },
     render: function(){
         var createAuthorRow = function(author){
             return (
                 <tr key = {author.id}>
-                    <td><a href = {'/#authors' + author.id}>{author.id}</a></td>
+                    <td><Link to="manageAuthor" params={{id: author.id}}>{author.id}</Link></td>
                     <td>{author.firstName} {author.lastName}</td>
                 </tr>
             );
@@ -25,7 +26,7 @@ var AuthorList = React.createClass({
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.authers.map(createAuthorRow, this)}
+                    {this.props.authors.map(createAuthorRow, this)}
                 </tbody>
                 
             </table>
